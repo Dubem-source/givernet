@@ -1,0 +1,80 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply bg-ink text-paper font-body;
+  background-image:
+    radial-gradient(circle at 15% 0%, rgba(217, 164, 65, 0.06), transparent 45%),
+    radial-gradient(circle at 85% 20%, rgba(127, 168, 143, 0.05), transparent 40%);
+  background-attachment: fixed;
+}
+
+::selection {
+  background: #D9A441;
+  color: #0F1B14;
+}
+
+/* Ledger card: the signature surface used for donation & shift entries */
+.ledger-row {
+  position: relative;
+}
+.ledger-row::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background-image: linear-gradient(to right, rgba(243,239,230,0.14) 0 6px, transparent 6px 10px);
+  background-size: 10px 1px;
+  background-repeat: repeat-x;
+}
+.ledger-row:last-child::before {
+  display: none;
+}
+
+.glass {
+  background: rgba(22, 36, 28, 0.6);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(243, 239, 230, 0.08);
+}
+
+.focus-ring:focus-visible {
+  outline: 2px solid #D9A441;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.input {
+  width: 100%;
+  background: rgba(22, 36, 28, 0.9);
+  border: 1px solid rgba(243, 239, 230, 0.12);
+  border-radius: 0.5rem;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.875rem;
+  outline: none;
+  color: #F3EFE6;
+}
+.input:focus-visible {
+  outline: 2px solid #d9a441;
+  outline-offset: 1px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(243,239,230,0.15); border-radius: 8px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(243,239,230,0.25); }
