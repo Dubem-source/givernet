@@ -21,6 +21,8 @@ export default function ShiftsPage() {
   const [saving, setSaving] = useState(false);
   const [assignShiftId, setAssignShiftId] = useState<string | null>(null);
   const [selectedVolunteer, setSelectedVolunteer] = useState("");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   async function load() {
     setLoading(true);
@@ -71,6 +73,8 @@ export default function ShiftsPage() {
     }
     setAssignShiftId(null);
     setSelectedVolunteer("");
+    setDropdownOpen(false);
+    setSearchQuery("");
     load();
   }
 
@@ -153,31 +157,94 @@ export default function ShiftsPage() {
                 {s.signups.length < s.capacity && (
                   <>
                     {assignShiftId === s.id ? (
-                      <div className="flex gap-2 mt-2">
-                        <select
-                          value={selectedVolunteer}
-                          onChange={(e) => setSelectedVolunteer(e.target.value)}
-                          className="input flex-1 text-xs py-1.5"
-                        >
-                          <option value="">Choose volunteer…</option>
-                          {volunteers
-                            .filter((v) => !s.signups.some((su) => su.volunteer_id === v.id))
-                            .map((v) => (
-                              <option key={v.id} value={v.id}>
-                                {v.name}
-                              </option>
-                            ))}
-                        </select>
+                      <div className="flex gap-2 mt-2 items-start relative">
+                        <div className="relative flex-1">
+                          <button
+                            type="button"
+                            onClick={() => setDropdownOpen(!dropdownOpen)}
+                            className="w-full flex items-center justify-between bg-ink-700 border border-paper/10 rounded-lg px-3 py-2 text-xs text-left focus-ring outline-none text-paper"
+                          >
+                            <span>
+                              {selectedVolunteer
+                                ? volunteers.find((v) => v.id === selectedVolunteer)?.name
+                                : "Choose volunteer…"}
+                            </span>
+                            <span className="text-paper/40 font-mono text-[9px]">▼</span>
+                          </button>
+
+                          {dropdownOpen && (
+                            <div className="absolute left-0 right-0 z-30 mt-1 bg-ink-850 border border-paper/15 rounded-lg shadow-xl overflow-hidden max-h-56 flex flex-col">
+                              <div className="p-1.5 border-b border-paper/10 bg-ink-900/40">
+                                <input
+                                  type="text"
+                                  placeholder="Search name or skills..."
+                                  value={searchQuery}
+                                  onChange={(e) => setSearchQuery(e.target.value)}
+                                  className="w-full bg-ink-700/60 border border-paper/5 rounded-md px-2 py-1 text-xs outline-none text-paper placeholder:text-paper/30"
+                                />
+                              </div>
+                              <div className="overflow-y-auto flex-1 py-1 max-h-40 scrollbar-thin">
+                                {volunteers
+                                  .filter((v) => !s.signups.some((su) => su.volunteer_id === v.id))
+                                  .filter((v) => {
+                                    const matchStr = `${v.name} ${v.skills?.join(" ") || ""}`.toLowerCase();
+                                    return matchStr.includes(searchQuery.toLowerCase());
+                                  })
+                                  .map((v) => (
+                                    <button
+                                      key={v.id}
+                                      type="button"
+                                      onClick={() => {
+                                        setSelectedVolunteer(v.id);
+                                        setDropdownOpen(false);
+                                        setSearchQuery("");
+                                      }}
+                                      className={`w-full flex flex-col items-start px-3 py-2 text-left hover:bg-gold/10 transition-colors border-b border-paper/5 last:border-0 ${
+                                        selectedVolunteer === v.id ? "bg-gold/15 text-gold" : "text-paper"
+                                      }`}
+                                    >
+                                      <span className="text-xs font-medium">{v.name}</span>
+                                      {v.skills && v.skills.length > 0 && (
+                                        <span className="flex flex-wrap gap-1 mt-1">
+                                          {v.skills.slice(0, 2).map((skill) => (
+                                            <span
+                                              key={skill}
+                                              className="text-[9px] bg-paper/5 border border-paper/10 text-paper/50 rounded-full px-1.5 py-0.5"
+                                            >
+                                              {skill}
+                                            </span>
+                                          ))}
+                                        </span>
+                                      )}
+                                    </button>
+                                  ))}
+                                {volunteers
+                                  .filter((v) => !s.signups.some((su) => su.volunteer_id === v.id))
+                                  .filter((v) => {
+                                    const matchStr = `${v.name} ${v.skills?.join(" ") || ""}`.toLowerCase();
+                                    return matchStr.includes(searchQuery.toLowerCase());
+                                  }).length === 0 && (
+                                  <div className="px-3 py-3 text-center text-xs text-paper/40">
+                                    No matching volunteers
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                        </div>
                         <button
                           onClick={() => assignVolunteer(s)}
-                          className="text-xs bg-gold text-ink-900 font-semibold rounded-lg px-3 focus-ring"
+                          className="text-xs bg-gold text-ink-900 font-semibold rounded-lg px-4 py-2 hover:bg-gold-light transition-colors focus-ring"
                         >
                           Add
                         </button>
                       </div>
                     ) : (
                       <button
-                        onClick={() => setAssignShiftId(s.id)}
+                        onClick={() => {
+                          setAssignShiftId(s.id);
+                          setDropdownOpen(true);
+                        }}
                         className="flex items-center gap-1.5 text-xs text-gold mt-2.5 hover:text-gold-light transition-colors focus-ring rounded"
                       >
                         <UserPlus size={13} /> Assign volunteer
