@@ -100,9 +100,9 @@ export default function ShiftsPage() {
       {loading ? (
         <p className="text-sm text-paper/45">Loading…</p>
       ) : shifts.length === 0 ? (
-        <div className="glass rounded-2xl p-12 text-center">
-          <CalendarClock className="mx-auto text-paper/20 mb-3" size={32} />
-          <p className="text-sm text-paper/45">No shifts scheduled yet.</p>
+        <div className="glass rounded-2xl p-12 flex flex-col items-center justify-center text-center min-h-[50vh]">
+          <CalendarClock className="text-paper/20 mb-4" size={48} />
+          <p className="text-sm text-paper/45 max-w-sm">No shifts scheduled yet.</p>
         </div>
       ) : (
         <div className="grid md:grid-cols-2 gap-4">

@@ -19,6 +19,17 @@ export default function StatCard({
     coral: "text-coral bg-coral/10",
   }[accent];
 
+  // Dynamically scale down font size as the text gets longer to prevent wrapping or truncation
+  const len = value.length;
+  const fontSizeClass =
+    len <= 6
+      ? "text-2xl sm:text-3xl"
+      : len <= 9
+      ? "text-xl sm:text-2xl"
+      : len <= 12
+      ? "text-lg sm:text-xl"
+      : "text-base sm:text-lg";
+
   return (
     <div className="glass rounded-2xl p-5">
       <div className="flex items-start justify-between mb-4">
@@ -27,7 +38,7 @@ export default function StatCard({
           <Icon size={16} strokeWidth={1.75} />
         </span>
       </div>
-      <div className="font-display text-3xl">{value}</div>
+      <div className={`font-display ${fontSizeClass}`}>{value}</div>
       {sub && <div className="text-xs text-paper/45 mt-1.5">{sub}</div>}
     </div>
   );

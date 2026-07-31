@@ -93,9 +93,9 @@ export default function DonationsPage() {
         {loading ? (
           <p className="text-sm text-paper/45">Loading…</p>
         ) : filtered.length === 0 ? (
-          <div className="text-center py-12">
-            <HandCoins className="mx-auto text-paper/20 mb-3" size={32} />
-            <p className="text-sm text-paper/45">No donations logged yet. Add the first one to start the ledger.</p>
+          <div className="flex flex-col items-center justify-center text-center py-20 min-h-[40vh]">
+            <HandCoins className="text-paper/20 mb-4" size={48} />
+            <p className="text-sm text-paper/45 max-w-sm">No donations logged yet. Add the first one to start the ledger.</p>
           </div>
         ) : (
           filtered.map((d) => (

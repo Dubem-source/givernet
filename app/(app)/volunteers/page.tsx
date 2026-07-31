@@ -84,9 +84,9 @@ export default function VolunteersPage() {
       {loading ? (
         <p className="text-sm text-paper/45">Loading…</p>
       ) : filtered.length === 0 ? (
-        <div className="glass rounded-2xl p-12 text-center">
-          <Users className="mx-auto text-paper/20 mb-3" size={32} />
-          <p className="text-sm text-paper/45">No volunteers on the roster yet.</p>
+        <div className="glass rounded-2xl p-12 flex flex-col items-center justify-center text-center min-h-[50vh]">
+          <Users className="text-paper/20 mb-4" size={48} />
+          <p className="text-sm text-paper/45 max-w-sm">No volunteers on the roster yet.</p>
         </div>
       ) : (
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
